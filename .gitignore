@@ -1,0 +1,27 @@
+# .NET / Visual Studio
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+artifacts/
+
+# Bundled native binaries (fetched via scripts/fetch-third-party.ps1; keep version.txt & LICENSE tracked)
+third_party/**/*.exe
+third_party/**/*.dll
+
+# User secrets / local config / DPAPI state
+*.pfx
+*.snk
+*.dpapi
+appsettings.Development.json
+
+# Installer output
+installer/Output/
+
+# Temp / OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

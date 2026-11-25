@@ -1,0 +1,11 @@
+# YesVPN project rules
+- Always read /plan.md before starting a task and follow its architecture.
+- Stack: .NET 8, C#, WPF (UI), Worker Service (Windows service), sing-box core. Do not introduce other frameworks without asking.
+- Keep the UI minimal: one primary action per screen. No settings sprawl.
+- Never log proxy credentials. Mask passwords in logs, UI, and exported files.
+- Never hardcode secrets. Store proxy credentials with Windows DPAPI (ProtectedData, CurrentUser/LocalMachine as appropriate).
+- Every feature needs unit tests where logic is testable (parsing, config generation, health checks).
+- Do not modify files under third_party/ except to update the pinned version and its LICENSE.
+- Before declaring a task done: run `dotnet build` and `dotnet test`, and summarize results.
+- Prefer small commits with clear messages. Do not rewrite unrelated files.
+- Anything touching routes, firewall, or the TUN adapter must have a documented cleanup path.

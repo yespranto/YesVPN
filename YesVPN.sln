@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{83D04590-0E91-4226-B55B-53EB98D4E9B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YesVPN.Core", "src\YesVPN.Core\YesVPN.Core.csproj", "{6F547453-7324-4719-9BB2-FEA66309E6C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YesVPN.Service", "src\YesVPN.Service\YesVPN.Service.csproj", "{00B3BC4C-B46F-4D6D-8BAD-4052C1D53978}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YesVPN.App", "src\YesVPN.App\YesVPN.App.csproj", "{F708FFAF-827C-4786-B5B6-98B97E9E8AC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AD1D12DA-3F8C-4336-8993-834FEE018946}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YesVPN.Tests", "tests\YesVPN.Tests\YesVPN.Tests.csproj", "{A7219B84-C10A-4071-8B64-F98033F8594F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F547453-7324-4719-9BB2-FEA66309E6C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F547453-7324-4719-9BB2-FEA66309E6C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F547453-7324-4719-9BB2-FEA66309E6C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F547453-7324-4719-9BB2-FEA66309E6C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00B3BC4C-B46F-4D6D-8BAD-4052C1D53978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00B3BC4C-B46F-4D6D-8BAD-4052C1D53978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00B3BC4C-B46F-4D6D-8BAD-4052C1D53978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00B3BC4C-B46F-4D6D-8BAD-4052C1D53978}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F708FFAF-827C-4786-B5B6-98B97E9E8AC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F708FFAF-827C-4786-B5B6-98B97E9E8AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F708FFAF-827C-4786-B5B6-98B97E9E8AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F708FFAF-827C-4786-B5B6-98B97E9E8AC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7219B84-C10A-4071-8B64-F98033F8594F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7219B84-C10A-4071-8B64-F98033F8594F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7219B84-C10A-4071-8B64-F98033F8594F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7219B84-C10A-4071-8B64-F98033F8594F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F547453-7324-4719-9BB2-FEA66309E6C4} = {83D04590-0E91-4226-B55B-53EB98D4E9B9}
+		{00B3BC4C-B46F-4D6D-8BAD-4052C1D53978} = {83D04590-0E91-4226-B55B-53EB98D4E9B9}
+		{F708FFAF-827C-4786-B5B6-98B97E9E8AC4} = {83D04590-0E91-4226-B55B-53EB98D4E9B9}
+		{A7219B84-C10A-4071-8B64-F98033F8594F} = {AD1D12DA-3F8C-4336-8993-834FEE018946}
+	EndGlobalSection
+EndGlobal

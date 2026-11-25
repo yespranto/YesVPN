@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>YesVPN</Product>
+    <Company>Pranto Biswas</Company>
+    <Authors>Pranto Biswas</Authors>
+    <Copyright>Copyright (c) 2026 Pranto Biswas</Copyright>
+    <PackageProjectUrl>https://www.yespranto.com</PackageProjectUrl>
+    <Description>Minimal Windows system-wide SOCKS5 proxy tunnel with auto-failover, load balancing, and WFP kill switch.</Description>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+  </PropertyGroup>
+</Project>
+

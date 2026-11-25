@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <RootNamespace>YesVPN.App</RootNamespace>
+    <AssemblyName>YesVPN.App</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\yesvpn.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\yesvpn.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YesVPN.Core\YesVPN.Core.csproj" />
+  </ItemGroup>
+</Project>

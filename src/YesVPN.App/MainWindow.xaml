@@ -1,0 +1,541 @@
+<Window x:Class="YesVPN.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="YesVPN"
+        Icon="pack://application:,,,/Assets/yesvpn.ico"
+        Width="680"
+        Height="820"
+        MinWidth="540"
+        MinHeight="660"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgPrimary}"
+        Foreground="{StaticResource TextPrimary}">
+
+    <Grid Margin="20,16,20,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="28" Height="28" CornerRadius="7" Background="{StaticResource BgElevated}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1" Margin="0,0,10,0">
+                    <Image Source="pack://application:,,,/Assets/yesvpn.ico" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality" />
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="YesVPN" FontSize="19" FontWeight="Bold" />
+                        <Ellipse x:Name="HeaderStatusDot" Width="8" Height="8" Margin="8,2,0,0" VerticalAlignment="Center">
+                            <Ellipse.Fill>
+                                <SolidColorBrush x:Name="HeaderDotBrush" Color="#64748B" />
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Background="{StaticResource BgSurface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1" CornerRadius="12" Padding="10,4">
+                    <TextBlock x:Name="ServiceStatusBadge"
+                               FontSize="11.5"
+                               Foreground="{StaticResource TextMuted}"
+                               Text="Checking service..." />
+                </Border>
+                <Button x:Name="ElevateServiceButton"
+                        Content="Elevate"
+                        Visibility="Collapsed"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Padding="10,4"
+                        FontSize="11.5"
+                        Margin="8,0,0,0"
+                        Click="ElevateService_Click" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Navigation Tabs -->
+        <TabControl x:Name="MainTabs"
+                    Grid.Row="1"
+                    Background="Transparent"
+                    BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="13.5" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="Padding" Value="16,9" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="TabBorder"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="0,0,0,2"
+                                        Padding="{TemplateBinding Padding}"
+                                        Margin="0,0,8,8"
+                                        Cursor="Hand">
+                                    <ContentPresenter ContentSource="Header" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="TabBorder" Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- TAB 1: CONNECT -->
+            <TabItem Header="Connect">
+                <Grid Margin="0,4,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- First-run privacy notice -->
+                    <Border x:Name="PrivacyNoticeBanner"
+                            Grid.Row="0"
+                            Background="{StaticResource BgSurface}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="12"
+                            Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMuted}" LineHeight="17">
+                                <Run FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Text="Privacy note: " />
+                                <Run Text="YesVPN routes your traffic through your SOCKS5 proxies. Plain SOCKS5 is not encrypted — proxy operators can see unencrypted traffic." />
+                            </TextBlock>
+                            <Button Grid.Column="1"
+                                    Content="Got it"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Padding="10,5"
+                                    FontSize="11.5"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Click="DismissPrivacyNotice_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Center Primary Control -->
+                    <Border Grid.Row="1"
+                            Background="{StaticResource BgSurface}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="24">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="430">
+                            <!-- Animated Connect/Disconnect Ring Assembly -->
+                            <Grid Width="210" Height="210" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <ScaleTransform x:Name="ButtonScale" ScaleX="1" ScaleY="1" />
+                                </Grid.RenderTransform>
+
+                                <!-- Expanding Pulse / Ripple Ring -->
+                                <Ellipse x:Name="PulseRing"
+                                         Width="176"
+                                         Height="176"
+                                         StrokeThickness="3"
+                                         Opacity="0"
+                                         IsHitTestVisible="False"
+                                         RenderTransformOrigin="0.5,0.5">
+                                    <Ellipse.Stroke>
+                                        <SolidColorBrush x:Name="PulseRingBrush" Color="#3B82F6" />
+                                    </Ellipse.Stroke>
+                                    <Ellipse.RenderTransform>
+                                        <ScaleTransform x:Name="PulseScale" ScaleX="1" ScaleY="1" />
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+
+                                <!-- Rotating Orbit Arc during Connecting/Reconnecting -->
+                                <Ellipse x:Name="OrbitArc"
+                                         Width="192"
+                                         Height="192"
+                                         StrokeThickness="2.5"
+                                         StrokeDashArray="14 8"
+                                         StrokeDashCap="Round"
+                                         Opacity="0"
+                                         IsHitTestVisible="False"
+                                         RenderTransformOrigin="0.5,0.5">
+                                    <Ellipse.Stroke>
+                                        <SolidColorBrush x:Name="OrbitArcBrush" Color="#F59E0B" />
+                                    </Ellipse.Stroke>
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform x:Name="OrbitRotate" Angle="0" />
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+
+                                <!-- Big Connect/Disconnect Button -->
+                                <Button x:Name="ConnectButton"
+                                        Width="176"
+                                        Height="176"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Click="ConnectButton_Click"
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Ellipse x:Name="GlowBack" Fill="#123B82F6" Margin="-6" />
+                                                <Ellipse x:Name="OuterRing"
+                                                         Fill="{StaticResource BgElevated}"
+                                                         StrokeThickness="4">
+                                                    <Ellipse.Stroke>
+                                                        <SolidColorBrush x:Name="ConnectRingColor" Color="#3B82F6" />
+                                                    </Ellipse.Stroke>
+                                                </Ellipse>
+                                                <Ellipse Stroke="#1AFFFFFF" StrokeThickness="1" Margin="8" />
+                                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <TextBlock x:Name="ButtonLabel"
+                                                               Text="{TemplateBinding Content}"
+                                                               FontSize="21"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center" />
+                                                    <TextBlock x:Name="ButtonSub"
+                                                               Text="{TemplateBinding Tag}"
+                                                               FontSize="11"
+                                                               Foreground="{StaticResource TextMuted}"
+                                                               HorizontalAlignment="Center"
+                                                               Margin="0,3,0,0" />
+                                                </StackPanel>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="OuterRing" Property="Fill" Value="{StaticResource BgHover}" />
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="OuterRing" Property="Opacity" Value="0.65" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Tag>Tap to route traffic</Button.Tag>
+                                    Connect
+                                </Button>
+                            </Grid>
+
+                            <TextBlock x:Name="ConnectionStatusText"
+                                       Text="Disconnected"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,10,0,6"
+                                       RenderTransformOrigin="0.5,0.5">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform x:Name="StatusTextSlide" Y="0" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+
+                            <!-- Info Pills -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,14">
+                                <Border Background="{StaticResource BgInput}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1" CornerRadius="14" Padding="11,4">
+                                    <TextBlock x:Name="PublicIpText"
+                                               Text="Public IP: —"
+                                               FontSize="12"
+                                               Foreground="{StaticResource TextMuted}" />
+                                </Border>
+                                <Button Content="Refresh"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        Padding="10,4"
+                                        FontSize="11.5"
+                                        Margin="8,0,0,0"
+                                        Click="RefreshIp_Click" />
+                                <Border x:Name="KillSwitchPill"
+                                        Background="{StaticResource BgInput}"
+                                        BorderBrush="{StaticResource BorderSubtle}"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="10,4"
+                                        Margin="8,0,0,0">
+                                    <TextBlock x:Name="KillSwitchPillText" Text="Kill Switch: ON" FontSize="11.5" Foreground="{StaticResource SuccessBrush}" />
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Live Network Speed Meter -->
+                            <Border Background="{StaticResource BgInput}"
+                                    BorderBrush="{StaticResource BorderSubtle}"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="12,10"
+                                    Margin="0,0,0,14">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="1" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="↓" FontSize="14" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}" Margin="0,0,6,0" />
+                                            <TextBlock Text="DOWNLOAD" FontSize="10.5" FontWeight="SemiBold" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock x:Name="DownloadSpeedText" Text="0 B/s" FontSize="16" FontWeight="Bold" Margin="0,2,0,2" />
+                                        <TextBlock x:Name="TotalDownloadText" Text="Total: 0 B" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,0,0,6" />
+                                        <ProgressBar x:Name="DownloadMeterBar" Height="4" Minimum="0" Maximum="100" Value="0"
+                                                     Background="#1B2434" Foreground="{StaticResource SuccessBrush}" BorderThickness="0" />
+                                    </StackPanel>
+
+                                    <Border Grid.Column="1" Background="{StaticResource BorderSubtle}" Margin="0,2" />
+
+                                    <StackPanel Grid.Column="2" Margin="12,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="↑" FontSize="14" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Margin="0,0,6,0" />
+                                            <TextBlock Text="UPLOAD" FontSize="10.5" FontWeight="SemiBold" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock x:Name="UploadSpeedText" Text="0 B/s" FontSize="16" FontWeight="Bold" Margin="0,2,0,2" />
+                                        <TextBlock x:Name="TotalUploadText" Text="Total: 0 B" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,0,0,6" />
+                                        <ProgressBar x:Name="UploadMeterBar" Height="4" Minimum="0" Maximum="100" Value="0"
+                                                     Background="#1B2434" Foreground="{StaticResource AccentBrush}" BorderThickness="0" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Mode Dropdown -->
+                            <Grid Margin="0,2,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="95" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Mode" VerticalAlignment="Center" Foreground="{StaticResource TextMuted}" FontSize="13" />
+                                <ComboBox x:Name="ModeComboBox"
+                                          Grid.Column="1"
+                                          SelectionChanged="ModeComboBox_SelectionChanged">
+                                    <ComboBoxItem Content="Auto (Fastest + Failover)" Tag="Auto" />
+                                    <ComboBoxItem Content="Load Balance (Merge All Proxies)" Tag="LoadBalance" />
+                                    <ComboBoxItem Content="Manual (Select Proxy)" Tag="Manual" />
+                                </ComboBox>
+                            </Grid>
+
+                            <TextBlock x:Name="LoadBalanceHint"
+                                       Visibility="Collapsed"
+                                       Text="Merges all active healthy SOCKS5 proxies by distributing connections round-robin to boost multi-stream speed."
+                                       FontSize="11.5"
+                                       Foreground="#93C5FD"
+                                       TextWrapping="Wrap"
+                                       Margin="95,0,0,6" />
+
+                            <!-- Manual Proxy Picker -->
+                            <Grid x:Name="ManualProxyPanel" Visibility="Collapsed" Margin="0,2,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="95" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Proxy" VerticalAlignment="Center" Foreground="{StaticResource TextMuted}" FontSize="13" />
+                                <ComboBox x:Name="ManualProxyComboBox"
+                                          Grid.Column="1"
+                                          DisplayMemberPath="DisplayLabel"
+                                          SelectionChanged="ManualProxyComboBox_SelectionChanged" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Status / UDP / Service Warnings -->
+                    <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                        <Border x:Name="UdpWarningBanner"
+                                Visibility="Collapsed"
+                                Background="#261D0E"
+                                BorderBrush="{StaticResource WarningBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="10"
+                                Margin="0,0,0,6">
+                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="#FDE68A"
+                                       Text="UDP warning: At least one active proxy does not support UDP ASSOCIATE. DNS is routed over TCP/TLS, but QUIC, games, or voice apps may not work." />
+                        </Border>
+
+                        <Border x:Name="ErrorBanner"
+                                Visibility="Collapsed"
+                                Background="#281317"
+                                BorderBrush="{StaticResource DangerBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="10">
+                            <TextBlock x:Name="ErrorBannerText" TextWrapping="Wrap" FontSize="12" Foreground="#FECACA" />
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 2: PROXIES -->
+            <TabItem Header="Proxies">
+                <Grid Margin="0,4,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Primary Proxy Toolbar -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="+ Add Proxies" Style="{StaticResource PrimaryButtonStyle}" Padding="14,7" Click="ToggleAddPanel_Click" />
+                        <Button x:Name="QuickTestButton" Content="Quick Test" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" Click="QuickTest_Click"
+                                ToolTip="Fast parallel connectivity check (2.5s timeout, skips UDP probe)" />
+                        <Button x:Name="TestAllButton" Content="Full Test" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" Click="TestAll_Click"
+                                ToolTip="Full check including UDP ASSOCIATE detection" />
+                        <TextBlock x:Name="ProxySummaryText" VerticalAlignment="Center" Margin="12,0,0,0" FontSize="12" Foreground="{StaticResource TextMuted}" />
+                    </StackPanel>
+
+                    <!-- Bulk Selection Toolbar -->
+                    <Grid Grid.Row="1" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <CheckBox x:Name="SelectAllProxiesCheckBox"
+                                      Content="Select All"
+                                      FontSize="12"
+                                      Margin="4,0,12,0"
+                                      Click="SelectAllProxies_Click" />
+                            <Button Content="Mark Dead" Style="{StaticResource SecondaryButtonStyle}" Padding="10,4" FontSize="11.5" Click="MarkDeadProxies_Click" />
+                            <Button x:Name="DeleteSelectedButton" Content="Delete Selected" Style="{StaticResource SecondaryButtonStyle}" Padding="10,4" FontSize="11.5" Margin="8,0,0,0" Click="DeleteSelected_Click" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Paste Multi-line Panel -->
+                    <Border x:Name="AddProxyPanel"
+                            Grid.Row="2"
+                            Visibility="Collapsed"
+                            Background="{StaticResource BgSurface}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="12"
+                            Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Paste one proxy per line (socks5://user:pass@host:port, host:port, or host:port:user:pass):"
+                                       FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,0,0,6" />
+                            <TextBox x:Name="PasteProxiesTextBox"
+                                     Height="96"
+                                     AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto"
+                                     FontFamily="Consolas"
+                                     FontSize="12" />
+                            <TextBlock x:Name="PasteErrorsText"
+                                       Visibility="Collapsed"
+                                       Foreground="#FCA5A5"
+                                       FontSize="11.5"
+                                       TextWrapping="Wrap"
+                                       Margin="0,6,0,0" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                                <Button Content="Cancel" Style="{StaticResource SecondaryButtonStyle}" Click="CancelAdd_Click" />
+                                <Button Content="Add to Pool" Style="{StaticResource PrimaryButtonStyle}" Padding="14,7" Margin="8,0,0,0" Click="ConfirmAddProxies_Click" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Proxy List -->
+                    <Border Grid.Row="3"
+                            Background="{StaticResource BgSurface}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            ClipToBounds="True">
+                        <ListView x:Name="ProxyListView"
+                                  SelectionMode="Extended"
+                                  SelectionChanged="ProxyListView_SelectionChanged"
+                                  KeyDown="ProxyListView_KeyDown"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Foreground="{StaticResource TextPrimary}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="" Width="36">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          Click="ProxySelectionCheck_Click"
+                                                          HorizontalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Proxy" Width="265" DisplayMemberBinding="{Binding Endpoint}" />
+                                    <GridViewColumn Header="Status" Width="88" DisplayMemberBinding="{Binding HealthText}" />
+                                    <GridViewColumn Header="Latency" Width="80" DisplayMemberBinding="{Binding LatencyText}" />
+                                    <GridViewColumn Header="UDP" Width="76" DisplayMemberBinding="{Binding UdpText}" />
+                                    <GridViewColumn Header="Active" Width="56">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          Click="ProxyEnabled_Click"
+                                                          HorizontalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 3: SETTINGS -->
+            <TabItem Header="Settings">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,4,0,0">
+                    <StackPanel>
+                        <Border Background="{StaticResource BgSurface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Safety &amp; Startup" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,12" />
+                                <CheckBox x:Name="KillSwitchCheckBox"
+                                          Content="Kill switch (block non-tunnel traffic and outside DNS if tunnel drops)"
+                                          Margin="0,0,0,10"
+                                          Click="SettingToggle_Click" />
+                                <CheckBox x:Name="BlockUdpCheckBox"
+                                          Content="Block non-DNS UDP traffic (prevents QUIC/UDP leaks on TCP-only proxies)"
+                                          Margin="0,0,0,10"
+                                          Click="SettingToggle_Click" />
+                                <CheckBox x:Name="StartWithWindowsCheckBox"
+                                          Content="Start YesVPN minimized to tray when Windows signs in"
+                                          Click="StartWithWindows_Click" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource BgSurface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Split Tunneling (Bypass Tunnel)" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" />
+                                <TextBlock Text="Bypass domains (one per line, e.g. *.local or company.com):" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4" />
+                                <TextBox x:Name="BypassDomainsTextBox" Height="56" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,8" />
+
+                                <TextBlock Text="Bypass IPs or CIDRs (one per line, e.g. 192.168.1.0/24):" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4" />
+                                <TextBox x:Name="BypassIpsTextBox" Height="56" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,8" />
+
+                                <TextBlock Text="Bypass app executables (one per line, e.g. slack.exe):" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4" />
+                                <TextBox x:Name="BypassAppsTextBox" Height="56" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10" />
+
+                                <Button Content="Save Split-Tunnel Rules" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" Click="SaveSplitTunnel_Click" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="{StaticResource BgSurface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1" CornerRadius="10" Padding="14">
+                            <StackPanel>
+                                <TextBlock Text="Diagnostics &amp; Licenses" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10" />
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <Button Content="View Service Logs" Style="{StaticResource SecondaryButtonStyle}" Click="ViewLogs_Click" />
+                                    <Button Content="Export Diagnostics (Masked)" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" Click="ExportDiagnostics_Click" />
+                                    <Button Content="About &amp; Licenses" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" Click="AboutLicenses_Click" />
+                                </StackPanel>
+                                <TextBlock Text="Bundled core: sing-box (GPL-3.0) + Wintun. Proxy passwords are encrypted via Windows DPAPI and never exported."
+                                           FontSize="11.5" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
